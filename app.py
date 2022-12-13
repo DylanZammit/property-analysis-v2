@@ -33,6 +33,7 @@ def get_data():
 
     #DO NOT CLEAN HERE
     df = df[df.Price!='POR']
+    df = df[df.Price > 100000]
 
     df.Price = df.Price.astype(int)
     df.TotalRooms = df.TotalRooms.astype(int)
@@ -57,16 +58,15 @@ def load_mapbox():
 
     mids = [x['id'] for x in features if x['id'] in price_by_loc]
     df_fmt = price_by_loc.loc[mids].reset_index()
-    #ignore = ['Wardija']
-    #df = df[~df.locality.isin(ignore)]
     df_fmt['format_price'] = df_fmt.Price.apply(lambda x: '€'+str(x))
 
     lat, lon = 35.917973, 14.409943
-    zmin = df_fmt.Price.quantile(0.05)
-    zmax = df_fmt.Price.quantile(0.95)
+    zmin = df_fmt.Price.quantile(0.1)
+    zmax = df_fmt.Price.quantile(0.8)
+    print(zmin, zmax)
 
-    # burgyl, oranges, hot
-    colorscale = 'YlOrBr'
+    # burgyl, oranges, hot, YlOrBr
+    colorscale = 'solar'
     fig = go.Figure(
         go.Choroplethmapbox(
             geojson=coords, 
