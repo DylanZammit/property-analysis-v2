@@ -36,7 +36,59 @@ class REMAX:
         '''
         clean data
         '''
-        self.data = self.data[self.data.Price!='POR']
+        outdoor_types = [
+            'Agriculture Land',
+            'Land',
+            'Plot',
+            'Site',
+        ]
+        indoor_types = [
+            'Apartment',
+            'Garage (Residential)',
+        ]
+        df = self.data
+        df = df[df.Price!='POR']
+        df = df[df.TransactionType == 'For Sale']
+
+        df.TotalIntArea = np.where(
+            (df.TotalIntArea==0)&(df.TotalExtArea==0)&(~df.PropertyType.isin(outdoor_types)), 
+            df.TotalSqm,
+            df.TotalIntArea
+        )
+
+        df.TotalExtArea = np.where(
+            (df.TotalIntArea==0)&(df.TotalExtArea==0)&(df.PropertyType.isin(outdoor_types)), 
+            df.TotalSqm,
+            df.TotalExtArea
+        )
+
+        df.TotalExtArea = np.where(
+            (df.TotalIntArea>0)&(df.TotalExtArea==0)&(df.TotalSqm>0), 
+            df.TotalSqm-df.TotalIntArea,
+            df.TotalExtArea
+        )
+
+        df.TotalIntArea = np.where(
+            (df.TotalIntArea==0)&(df.TotalExtArea>0)&(df.TotalSqm>0), 
+            df.TotalSqm-df.TotalExtArea,
+            df.TotalIntArea
+        )
+
+        df.TotalSqm = np.where(
+            (df.TotalIntArea>0)&(df.TotalExtArea>0)&(df.TotalSqm==0), 
+            df.TotalIntArea+df.TotalExtArea,
+            df.TotalSqm
+        )
+
+        df.TotalSqm = np.where(
+            (df.TotalSqm-df.TotalIntArea-df.TotalExtArea)<40, 
+            df.TotalIntArea+df.TotalExtArea, 
+            df.TotalSqm
+        )
+
+        df = df[(df.TotalSqm-df.TotalIntArea-df.TotalExtArea)==0]
+
+        self.data = df # technically not needed
         return self
 
     def get_data(self, batch_size=500, pages=np.inf):

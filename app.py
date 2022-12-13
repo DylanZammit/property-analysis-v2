@@ -33,7 +33,7 @@ def get_data():
 
     #DO NOT CLEAN HERE
     df = df[df.Price!='POR']
-    df = df[df.Price > 100000]
+    df = df[df.TransactionType!='For Rent']
 
     df.Price = df.Price.astype(int)
     df.TotalRooms = df.TotalRooms.astype(int)
@@ -61,8 +61,8 @@ def load_mapbox():
     df_fmt['format_price'] = df_fmt.Price.apply(lambda x: '€'+str(x))
 
     lat, lon = 35.917973, 14.409943
-    zmin = df_fmt.Price.quantile(0.1)
-    zmax = df_fmt.Price.quantile(0.8)
+    zmin = df_fmt.Price.quantile(0.3)
+    zmax = df_fmt.Price.quantile(0.95)
     print(zmin, zmax)
 
     # burgyl, oranges, hot, YlOrBr
