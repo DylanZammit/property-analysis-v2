@@ -1,0 +1,414 @@
+#compare-bar {
+    height: 600px;
+}
+
+#selection-area
+{
+    /*border-radius: 4px;
+    border: 1px solid #0000FF;*/
+    background-color: #252e3f;
+    width: 30%;
+    float: left;
+    padding: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.option, .dash-dropdown
+{
+    margin-top: 10%;
+}
+
+.box-shadow
+{
+    background-color: #fff;
+    height: 290px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.box-shadow::after
+{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    -moz-box-shadow: inset 0 -10px 10px -10px #000000;
+    -webkit-box-shadow: inset 0 -10px 10px -10px #000000;
+    box-shadow: inset 0 -15px 10px -10px rgb(35 44 57);
+    overflow: hidden;
+}
+
+#title {
+    position: relative;
+    vertical-align: middle;
+    display: table-caption;
+    margin-left: 50px;
+    font-size: 40px;
+    color: #ffffff
+}
+
+.tabs {
+    font-size: 25px;
+}
+
+.instructions {
+    font-size: 35px;
+    padding-top: 50px;
+    padding-left: 10%;
+    padding-right: 10%;
+    text-align: center;
+}
+
+#main-img {
+	/*float: left;*/
+	margin-top: 8vh;
+}
+
+#malta-graph {
+    width: 100%;
+    height: 800px
+}
+
+#backest {
+    background-color: #ADD8E6; /*#052a33*/
+    height: 100vh;
+    overflow: auto;
+}
+
+#bar-graph {
+    padding: 10px;
+}
+
+#quote-image-container {
+    width: 40%;
+    float: left;
+    margin-left: 4%;
+    transition-duration: 1s;
+}
+
+#quote-image {
+    width: 100%;
+    height: 100%;
+    border-radius: 10%;
+}
+
+#main-banner {
+    width: 100%;
+}
+
+#quote-filter-area{
+    width: 56%;
+    float: left;
+}
+
+#page-content {
+    /*visibility: hidden;*/
+    top: 100px;
+    float: left;
+    width: 100%;
+    height: fit-content;
+}
+
+#img-filters-quote {
+    overflow: hidden;
+}
+
+#quote-output{
+    font-size: 40px;
+    text-align: center;
+    color: #808080;
+    margin-left: 20%;
+    margin-right: 20%;
+    padding: 20px 32px;
+    padding-bottom: 40px;
+}
+
+#quote-button {
+    font-size: 20px;
+    background-color: white;
+    color: black;
+    border: 4px solid #008CBA;
+    margin-left: 20%;
+    margin-right: 20%;
+    margin-bottom: 50px;
+    padding: 20px 32px;
+    border-radius: 8px;
+    transition-duration: 0.4s;
+}
+
+#prop-link {
+    width: 100%;
+    font-size: 20px;
+}
+
+#scatter-options {
+    width: 30%;
+    float: left;
+}
+
+#scatter-area ,#bar-area, #main-area, #quote-area{
+    border-radius: 10px;
+    box-shadow: 0 5px 12px 2px rgba(0,48,130,.3)!important;
+    margin-bottom: 40px;
+    width: 96%;
+    margin-left: 2%;
+    background-color: #FFF;
+}
+
+#main-area{
+    height: fit-content;
+    /*padding-top: 15vh;*/
+    /*margin-top: 45vh*/
+    margin-top: 50px;
+}
+
+#main-buttons-div {
+    overflow: hidden;
+    /*padding-bottom: 50px;*/
+    /*padding-top: 40px;*/
+}
+
+#quote-title {
+    text-align: center;
+    font-size: 50px;
+    padding: 30px
+}
+
+#header{
+    z-index: 1;
+    position: fixed;
+    text-align: center;
+    font-size: 50px;
+    height: 12vh;
+    width: 100%;
+    background-color: #252e3f;
+    margin: 0px;
+    box-shadow: 0 0 2rem rgb(35 44 57 / 80%);
+}
+
+
+body {
+    margin: 0px;
+}
+
+.dark-mode {
+}
+
+thead {
+    font-size: 20px;
+    text-align: center;
+    background-color: #36304a;
+    color: #FFFFFF;
+}
+
+table {
+    border-radius: 10px;
+    box-shadow: 0 5px 12px 2px rgba(0,48,130,.08)!important;
+    width: 100%;
+    margin: 20px;
+    margin-left: 0px;
+}
+
+table tr:nth-child(odd) {
+    background-color: #f5f5f5;
+}
+
+table td {
+    padding: 10px;
+}
+
+table tr {
+    #font-family: OpenSans-Regular;
+    #font-size: 15px;
+    #color: #808080;
+    line-height: 1.2;
+    font-weight: unset;
+}
+
+.filters {
+    float: left;
+    margin: auto;
+    width: 100%;
+    margin-bottom: 20px
+}
+
+.slider {
+    color: #008CBA;
+    overflow: visible;
+    clear: both;
+    width: 80%;
+	padding: 0px;
+	padding-left: 10%;
+	padding-top: 40px;
+}
+
+.slider-displayer {
+	text-align: center;
+    padding-top: 15px;
+    padding-left: 10px;
+    font-size: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #808080;
+}
+
+.filter-quote-dd {
+    overflow: visible;
+	padding-top: 25px;
+	padding-bottom: 25px;
+	padding-left: 10%;
+    clear: both;
+    float: left;
+    margin: auto;
+    width: 80%;
+}
+
+.filter-dd {
+    overflow: visible;
+    padding: 8px;
+    clear: both;
+}
+
+.button {
+    background-color: white;
+    color: black;
+    border: 2px solid #008CBA;
+    margin-top: 10px;
+    padding: 10px 24px;
+    border-radius: 8px;
+    transition-duration: 0.4s
+}
+
+.main-link{
+    color: inherit;
+    text-decoration: none;
+    overflow: visible;
+}
+
+#main-quote-btn{
+    font-size: 30px;
+    background-color: white;
+    color: black;
+    border: 4px solid #008CBA;
+    margin-left: 20%;
+    margin-right: 15px;
+    #padding: 50px 72px;
+    border-radius: 8px;
+    transition-duration: 0.4s;
+    width: 25%;
+    float: left;
+    padding: 0px;
+    height: 150px;
+}
+
+#main-analysis-btn{
+    font-size: 30px;
+    background-color: white;
+    color: black;
+    border: 4px solid #008CBA;
+    margin-left: 15px;
+    margin-right: 20%;
+    #padding: 50px 72px;
+    border-radius: 8px;
+    transition-duration: 0.4s;
+    width: 25%;
+    float: right;
+    padding: 0px;
+    height: 150px;
+}
+
+#main-quote-btn:hover {
+    background-color: #008CBA; /* Blue*/
+    color: white;
+}
+
+#main-analysis-btn:hover {
+    background-color: #008CBA; /* Blue*/
+    color: white;
+}
+
+.button:hover {
+    background-color: #008CBA; /* Blue*/
+    color: white;
+}
+
+#quote-button:hover {
+    background-color: #008CBA; /* Blue*/
+    color: white;
+}
+
+.fade-in-text {
+	width: 100%;
+	text-align: center;
+	display: inline-block;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 35px;
+	color: #808080;
+	animation: fadeIn linear 4s;
+	-webkit-animation: fadeIn linear 4s;
+	-moz-animation: fadeIn linear 4s;
+	-o-animation: fadeIn linear 4s;
+	-ms-animation: fadeIn linear 4s;
+	/*padding-top: 100px;
+	padding-bottom: 130px;*/
+	padding-top: 5%;
+	padding-bottom: 5%;
+}
+
+@keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+@-moz-keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+@-webkit-keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+@-o-keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+@-ms-keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+#scroll-container{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    width: 80px;
+    height: 60px;
+    /*padding: 50px;*/
+	padding-bottom: 20px;
+	padding-top: 20px;
+}
+
+#scroll-down{
+    width: 100%;
+    animation: animate 1.5s linear infinite;
+} 
+  
+ @keyframes animate{
+   0%{
+     opacity: 0;
+   }
+   50%{
+     opacity: 0.7;
+   }
+   100%{
+     opacity: 0;
+   }
+ }
