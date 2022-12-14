@@ -48,7 +48,6 @@ class REMAX:
         ]
         df = self.data
         df = df[df.Price!='POR']
-        df = df[df.TransactionType == 'For Sale']
 
         df.TotalIntArea = np.where(
             (df.TotalIntArea==0)&(df.TotalExtArea==0)&(~df.PropertyType.isin(outdoor_types)), 
