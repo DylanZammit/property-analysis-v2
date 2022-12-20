@@ -13,7 +13,6 @@ class REMAX:
 
     def get_property_batch(self, take=500, pages=np.inf):
         url = 'https://remax-malta.com/api/properties?Residential=true&Commercial=false&ForSale=true&ForRent=true&page={}&Take={}'
-        #url = 'https://remax-malta.com/api/properties?Residential=true&Commercial=false&ForSale=true&ForRent=false&page={}&Take={}'
         curr_page = 1
         n_loaded = 0
         tsr = 1 # will be overwritten
