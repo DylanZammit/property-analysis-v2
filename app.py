@@ -58,7 +58,7 @@ df_fmt['format_price'] = df_fmt.Price.apply(lambda x: '€'+str(x))
 
 @app.callback(
     Output('malta-fig', 'figure'),
-    Input('transaction-quote-dd', 'value'),
+    Input('rent-sale-tabs', 'value'),
 )
 def update_mapbox(trans):
     print(f'updating map: {trans}')
@@ -71,7 +71,6 @@ def update_mapbox(trans):
 
     # burgyl, oranges, hot, YlOrBr
     colorscale = 'solar'
-    #embed()
     fig = go.Figure(
         go.Choroplethmapbox(
             geojson=coords, 
@@ -100,6 +99,7 @@ def update_mapbox(trans):
         paper_bgcolor=light_bg,
         height=700,
         margin={'b': 20, 'l': 0, 'r': 120, 't': 20},
+        dragmode=False,
     )
     return fig
 
@@ -120,6 +120,47 @@ def load_mapbox():
     return graph 
 
 @app.callback(
+    Output('loc-hist-fig', 'figure'),
+    Input('beds-quote-slider', 'value'),
+    Input('loc-quote-dd', 'value'),
+    Input('type-quote-dd', 'value'),
+    Input('rent-sale-tabs', 'value'),
+)
+def update_hist(beds, town, prop_type, trans):
+    df_subset = df[
+        (df.Town==town)
+        &(df.PropertyType==prop_type)
+        &(df.TransactionType==trans)
+        #&(df.TotalBedrooms==beds)
+    ]
+    fig = px.histogram(
+        df_subset,
+        x='Price',
+        height=150,
+        title = 'asdasdasd'
+    )
+    fig.update_yaxes(visible=False)
+    #fig.update_layout(showlegend=False)
+    fig.update_layout(
+        plot_bgcolor=light_bg,
+        paper_bgcolor=light_bg,
+        margin={'b': 0, 'l': 0, 'r': 0, 't': 0},
+        font=dict(color="darkgray"),
+        dragmode=False,
+    )
+    return fig
+
+def load_histogram():
+    graph = dcc.Graph(
+            id='loc-hist-fig', 
+            config={
+                'displayModeBar': False, 
+            }, 
+        )
+
+    return graph 
+
+@app.callback(
     Output('loc-quote-dd', 'value'),
     Input('malta-fig', 'clickData'))
 def display_click_data(clickData):
@@ -128,41 +169,35 @@ def display_click_data(clickData):
 def load_option_pane():
     layout = html.Div(
         [
-            html.H2('Property Features', id='selection-title'),
+            html.Div(
+                dcc.Tabs(id="rent-sale-tabs", value='For Sale', children=[
+                    dcc.Tab(label='For Sale', value='For Sale', className="tabval"),
+                    dcc.Tab(label='For Rent', value='For Rent', className='tabval'),
+                ],
+                className="tab-container",
+                ),
+            ),
+            html.Div([
             dcc.Dropdown(options=[{'label': k, 'value': k} for k in df.Town.unique()],
                          id='loc-quote-dd',
                          className='option',
                          value='Attard',
-                         clearable=False
                         ),
             dcc.Dropdown(options=[{'label': k, 'value': k} for k in df.PropertyType.unique()],
                         id='type-quote-dd',
                         className='option',
                         value='Apartment',
-                        clearable=False
                         ),
-            dcc.Dropdown(id='transaction-quote-dd',
-                         className='option',
-                         #placeholder='Choose property type',
-                         value='For Rent',
-                         options=[
-                             {'label': 'For Sale', 'value': 'For Sale'},
-                             {'label': 'For Rent', 'value': 'For Rent'},
-                         ],
-                         clearable=False,
+            dcc.Dropdown(options=[{'label': f'{i} bedrooms', 'value': i} for i in range(1, 5)],
+                        id='beds-quote-slider',
+                        className='option',
+                        value=2,
                         ),
-            dcc.Slider(id='beds-quote-slider',
-                       min=1,
-                       max=10,
-                       marks={i: {'label': str(i)} for i in range(1, 11)},
-                       #marks={i: {'label': str(i), 'color': '#77b0b1'} for i in range(1, 11)},
-                       tooltip={"placement": "bottom", "always_visible": True},
-                       step=1,
-                       value=2,
-                       updatemode='drag',
-                       className='option',
-                       included=False),
             html.Div(id='quote-output', className='option'),
+            load_histogram(),
+            ],
+            id='selection-content'            
+            )
         ], 
         id='selection-area'
     )
@@ -173,7 +208,7 @@ def load_option_pane():
     Input('beds-quote-slider', 'value'),
     Input('loc-quote-dd', 'value'),
     Input('type-quote-dd', 'value'),
-    Input('transaction-quote-dd', 'value'),
+    Input('rent-sale-tabs', 'value'),
 )
 def quote_button(beds, town, prop_type, transaction):
 
@@ -197,12 +232,13 @@ if __name__ == '__main__':
 
     graph = load_mapbox()
     option_pane = load_option_pane()
+    hist = load_histogram()
 
 
     app.layout = html.Div(
         [
             html.Div(id='header', children=[
-                html.Div('Malta Properties', id='title'),
+                html.Div('Malta Property Analysis', id='title'),
             ]),
             html.Div(
                 children=[
