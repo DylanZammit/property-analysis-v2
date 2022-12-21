@@ -11,9 +11,11 @@ import pandas as pd
 import os
 import json
 import numpy as np
-from data import model
+#from data import model
 from data import remax as df
+from models.anova import get_model
 
+model = get_model()
 dark_bg = '#1f2630'
 light_bg = '#252e3f'
 

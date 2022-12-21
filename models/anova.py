@@ -114,9 +114,8 @@ def save(obj, fn='remax_model.pkl'):
     with open(fn, 'wb') as handle:
         pickle.dump(obj, handle)
 
-if __name__=='__main__':
+def get_model():
     from data import remax as df
-    from sklearn.metrics import mean_squared_error as mse
 
     categ = [
         'PropertyType',
@@ -142,9 +141,12 @@ if __name__=='__main__':
         cross=False
     )
     model.fit()
+    return model
+
+if __name__=='__main__':
+    from sklearn.metrics import mean_squared_error as mse
+    model = get_model()
     df['pred'] = model.predict(df)
     save(model)
     print(f'RMSE = {mse(df.pred, df.Price)**0.5}')
-
-    #breakpoint()
 
