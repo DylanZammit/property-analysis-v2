@@ -22,6 +22,27 @@ span.Select-clear-zone {
   cursor: pointer;
 }
 
+#header-info{
+    width: 300px;
+    float: right;
+    display: inline-flex;
+    flex-direction: row-reverse;
+}
+
+#authname{
+  font-family: open sans,sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #ffffff !important;
+  text-decoration: none !important;
+  margin-right: 25px;
+}
+
+#linkedin{
+    margin-right: 15px;
+}
+
 #region-select-all, #state-select-outer > label, #select-metric-outer > label {
   margin-bottom: 2px;
   color: #7b7d8d;
@@ -230,6 +251,21 @@ span.Select-clear-zone {
     font-size: 25px;
 }
 
+a, a:hover, a:focus, a:active {
+     text-decoration: none;
+     color: inherit;
+}
+
+
+#title{
+    float: left;
+    margin-left: 45px;
+    margin-top: 5px;
+    text-align: left;
+    width: 500px;
+    font-size: 30px;
+    line-height: 10vh;
+}
 
 #header{
     z-index: 1;

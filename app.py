@@ -61,7 +61,6 @@ df_fmt['format_price'] = df_fmt.Price.apply(lambda x: '€'+str(x))
     Input('rent-sale-tabs', 'value'),
 )
 def update_mapbox(trans):
-    print(f'updating map: {trans}')
 
     df_trans = df_fmt[df_fmt.TransactionType==trans]
 
@@ -137,10 +136,8 @@ def update_hist(beds, town, prop_type, trans):
         df_subset,
         x='Price',
         height=150,
-        title = 'asdasdasd'
     )
     fig.update_yaxes(visible=False)
-    #fig.update_layout(showlegend=False)
     fig.update_layout(
         plot_bgcolor=light_bg,
         paper_bgcolor=light_bg,
@@ -153,6 +150,7 @@ def update_hist(beds, town, prop_type, trans):
 def load_histogram():
     graph = dcc.Graph(
             id='loc-hist-fig', 
+            figure=px.histogram(df, x='Price'),
             config={
                 'displayModeBar': False, 
             }, 
@@ -239,6 +237,11 @@ if __name__ == '__main__':
         [
             html.Div(id='header', children=[
                 html.Div('Malta Property Analysis', id='title'),
+                html.Div([
+                     html.A(html.Div('Dylan Zammit', id='authname'), href='https://www.linkedin.com/in/dylanzam/'),
+                     html.A(html.Img(src='assets/linkedin-48.png', id='linkedin'), href='https://www.linkedin.com/in/dylanzam/')
+                    ], id='header-info'
+                ),
             ]),
             html.Div(
                 children=[
