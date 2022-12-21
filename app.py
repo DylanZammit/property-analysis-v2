@@ -2,8 +2,7 @@
 # visit http://127.0.0.1:8050/ in your web browser.
 
 from plotly.graph_objs.choroplethmapbox import ColorBar
-from dash.dependencies import Input, Output, State
-from IPython import embed
+from dash.dependencies import Input, Output
 import plotly.graph_objects as go
 from dash import Dash, html, dcc
 import plotly.express as px
@@ -20,7 +19,7 @@ dark_bg = '#1f2630'
 light_bg = '#252e3f'
 
 token = 'pk.eyJ1IjoiZHlsYW56YW0iLCJhIjoiY2t2OWcxaWt3NXV4dzJvczc3cm45YTlrcCJ9.k-EnkUZMK1rybum84KDgXw'
-BASE_PATH = os.getcwd()
+BASE_PATH = os.path.dirname(os.path.realpath(__file__))
 data_path = os.path.join(BASE_PATH, 'data')
 asset_path = os.path.join(BASE_PATH, 'assets')
 fn_reset_css = os.path.join(asset_path, 'reset.css')
@@ -50,7 +49,7 @@ def transform_types(df):
 df = transform_types(df)
 town_province = df[['Town', 'Province']].groupby('Town').first()
 
-price_by_loc = df.groupby(['Town', 'TransactionType']).median()['Price']
+price_by_loc = df.groupby(['Town', 'TransactionType', 'PropertyType']).median()['Price']
 locs = np.unique(df.Town)
 features = coords['features']
 
@@ -61,13 +60,14 @@ df_fmt['format_price'] = df_fmt.Price.apply(lambda x: '€'+str(x))
 @app.callback(
     Output('malta-fig', 'figure'),
     Input('rent-sale-tabs', 'value'),
+    Input('type-quote-dd', 'value'),
 )
-def update_mapbox(trans):
+def update_mapbox(trans, prop_type):
 
-    df_trans = df_fmt[df_fmt.TransactionType==trans]
+    df_trans = df_fmt[(df_fmt.TransactionType==trans)&(df_fmt.PropertyType==prop_type)]
 
     lat, lon = 35.917973, 14.409943
-    zmin = df_trans.Price.quantile(0.1)
+    zmin = df_trans.Price.quantile(0.05)
     zmax = df_trans.Price.quantile(0.95)
 
     # burgyl, oranges, hot, YlOrBr
@@ -137,22 +137,25 @@ def update_hist(beds, town, prop_type, trans):
     fig = px.histogram(
         df_subset,
         x='Price',
-        height=150,
+        height=200,
+        title=f'{town} ({prop_type}) Price Distribution',
+        nbins=25,
     )
-    fig.update_yaxes(visible=False)
+    #fig.update_yaxes(visible=False)
+    #fig.update_xaxes(visible=False)
     fig.update_layout(
         plot_bgcolor=light_bg,
         paper_bgcolor=light_bg,
-        margin={'b': 0, 'l': 0, 'r': 0, 't': 0},
+        margin={'b': 0, 'l': 0, 'r': 0, 't': 30},
         font=dict(color="darkgray"),
         dragmode=False,
+        title_x=0.5,
     )
     return fig
 
 def load_histogram():
     graph = dcc.Graph(
             id='loc-hist-fig', 
-            figure=px.histogram(df, x='Price'),
             config={
                 'displayModeBar': False, 
             }, 
@@ -178,12 +181,12 @@ def load_option_pane():
                 ),
             ),
             html.Div([
-            dcc.Dropdown(options=[{'label': k, 'value': k} for k in df.Town.unique()],
+            dcc.Dropdown(options=[{'label': k, 'value': k} for k in sorted(df.Town.unique())],
                          id='loc-quote-dd',
                          className='option',
                          value='Attard',
                         ),
-            dcc.Dropdown(options=[{'label': k, 'value': k} for k in df.PropertyType.unique()],
+            dcc.Dropdown(options=[{'label': k, 'value': k} for k in sorted(df.PropertyType.unique())],
                         id='type-quote-dd',
                         className='option',
                         value='Apartment',
@@ -195,6 +198,7 @@ def load_option_pane():
                         ),
             html.Div(id='quote-output', className='option'),
             load_histogram(),
+            html.Div('Tip: Click on the map to quickly change your selection', id='tip'),
             ],
             id='selection-content'            
             )
@@ -226,46 +230,41 @@ def quote_button(beds, town, prop_type, transaction):
 
     divn = 1000 if out > 10000 else 50 
     out = int(out//divn*divn)
-    return f'Estimate is €{out:,}'
+    return f'Price Prediction is €{out:,}'
+
+
+graph = load_mapbox()
+option_pane = load_option_pane()
+hist = load_histogram()
+
+
+app.layout = html.Div(
+    [
+        html.Div(id='header', children=[
+            html.Div('Malta Property Analysis', id='title'),
+            html.Div([
+                 html.A(html.Div('Dylan Zammit', id='authname'), href='https://www.linkedin.com/in/dylanzam/'),
+                 html.A(html.Img(src='assets/linkedin-48.png', id='linkedin'), href='https://www.linkedin.com/in/dylanzam/')
+                ], id='header-info'
+            ),
+        ]),
+        html.Div(
+            children=[
+                option_pane,
+                graph,
+            ],
+            id='main-area'
+        ),
+        html.Div('''The publicly available data was collected from remax-malta.com and I make no claim that the data is fully up to date and
+                representative of the whole Maltese property scene. Prices shown in this page are inclusive of
+                commissions charged by Remax Malta. I have no association with Remax Malta.''', id='disclaimer'),
+    ], 
+    id='malta-map-area',
+    style={
+        'background-color': dark_bg,
+        'height': '100vh'
+    }
+)
 
 if __name__ == '__main__':
-
-    graph = load_mapbox()
-    option_pane = load_option_pane()
-    hist = load_histogram()
-
-
-    app.layout = html.Div(
-        [
-            html.Div(id='header', children=[
-                html.Div('Malta Property Analysis', id='title'),
-                html.Div([
-                     html.A(html.Div('Dylan Zammit', id='authname'), href='https://www.linkedin.com/in/dylanzam/'),
-                     html.A(html.Img(src='assets/linkedin-48.png', id='linkedin'), href='https://www.linkedin.com/in/dylanzam/')
-                    ], id='header-info'
-                ),
-            ]),
-            html.Div(
-                children=[
-                    option_pane,
-                    graph,
-                ],
-                style = {
-                    'padding-top': '17vh', 
-                    'overflow': 'auto', 
-                    'display': 'flex',
-                    'margin-right': '20px',
-                }
-            ),
-            html.Div('''The publicly available data was collected from remax-malta.com and I make no claim that the data is fully up to date and
-                    representative of the whole Maltese property scene. Prices shown in this page are inclusive of
-                    commissions charged by Remax Malta. I have no association with Remax Malta.''', id='disclaimer'),
-        ], 
-        id='malta-map-area',
-        style={
-            'background-color': dark_bg,
-            'height': '100vh'
-        }
-    )
-
-    app.run_server()
+    app.run_server(debug=True)
