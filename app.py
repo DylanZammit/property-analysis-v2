@@ -230,7 +230,10 @@ def quote_button(beds, town, prop_type, transaction):
 
     divn = 1000 if out > 10000 else 50 
     out = int(out//divn*divn)
-    return f'Price Prediction is €{out:,}'
+    if transaction == 'For Rent':
+        return f'Predicted monthly rent is €{out:,}' 
+    elif transaction == 'For Sale':
+        return f'Price Prediction is €{out:,}'
 
 
 graph = load_mapbox()
